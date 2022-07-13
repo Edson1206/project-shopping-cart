@@ -14,9 +14,7 @@ const createCustomElement = (element, className, innerText) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const cartItemClickListener = (event) => {
-  event.target.remove();
-};
+const cartItemClickListener = (event) => event.target.remove();
 
 const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
   const li = document.createElement('li');
@@ -27,10 +25,11 @@ const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
 };
 
 const loadProdutsCart = async (event) => {
-  const results = await fetchItem(event.target.parentNode.firstChild.innerText);
-  const { id, title, price } = results;
+  const ProductID = getSkuFromProductItem(event.target.parentNode);
+  const fetchEveryItem = await fetchItem(ProductID);
   const elementProduct = document.querySelector('.cart__items');
-  elementProduct.appendChild(createCartItemElement({ id, title, price }));
+  const cart = createCartItemElement(fetchEveryItem);
+  elementProduct.appendChild(cart);
 };
 
 const createProductItemElement = ({ sku, name, image }) => {
