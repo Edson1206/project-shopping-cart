@@ -66,7 +66,22 @@ const loadProductList = async () => {
     saveCartItems(elementProduct.innerHTML);
   });
 
+  const loading = () => {
+    const element = document.createElement('h1');
+    element.innerText = 'carregando...';
+    element.className = 'loading';
+    const body = document.querySelector('body');
+    body.appendChild(element);
+  };
+
+  const removeLoading = () => {
+    const tagLoading = document.querySelector('.loading');
+    tagLoading.remove();
+  };
+
 window.onload = async () => { 
+  loading();
   await loadProductList();
+  removeLoading();
   getSavedCartItems(elementProduct.innerHTML);
 };
