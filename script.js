@@ -1,3 +1,5 @@
+const elementProduct = document.querySelector('.cart__items');
+
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -14,7 +16,9 @@ const createCustomElement = (element, className, innerText) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const cartItemClickListener = (event) => event.target.remove();
+const cartItemClickListener = (event) => 
+  event.target.remove();
+  saveCartItems(elementProduct.innerHTML);
 
 const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
   const li = document.createElement('li');
@@ -27,9 +31,9 @@ const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
 const loadProdutsCart = async (event) => {
   const ProductID = getSkuFromProductItem(event.target.parentNode);
   const fetchEveryItem = await fetchItem(ProductID);
-  const elementProduct = document.querySelector('.cart__items');
   const cart = createCartItemElement(fetchEveryItem);
   elementProduct.appendChild(cart);
+  saveCartItems(elementProduct.innerHTML);
 };
 
 const createProductItemElement = ({ sku, name, image }) => {
@@ -56,6 +60,13 @@ const loadProductList = async () => {
   });
 };
 
-window.onload = () => { 
-  loadProductList();
+  const clean = document.querySelector('.empty-cart');
+  clean.addEventListener('click', () => {
+    elementProduct.innerHTML = '';
+    saveCartItems(elementProduct.innerHTML);
+  });
+
+window.onload = async () => { 
+  await loadProductList();
+  getSavedCartItems(elementProduct.innerHTML);
 };
