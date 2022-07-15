@@ -30,7 +30,6 @@ const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').inn
 const cartItemClickListener = (event) => {
   event.target.remove();
   sumPrices();
-  saveCartItems('cartItems', elementProduct.innerHTML);
 };
 
 const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
@@ -46,7 +45,7 @@ const loadProdutsCart = async (event) => {
   const fetchEveryItem = await fetchItem(ProductID);
   const cart = createCartItemElement(fetchEveryItem);
   elementProduct.appendChild(cart);
-  saveCartItems('cartItems', elementProduct.innerHTML);
+  saveCartItems(elementProduct.innerHTML);
   sumPrices();
 };
 
@@ -77,7 +76,7 @@ const loadProductList = async () => {
 const clean = document.querySelector('.empty-cart');
 clean.addEventListener('click', () => {
   elementProduct.innerHTML = '';
-  saveCartItems('cartItems', elementProduct.innerHTML);
+  saveCartItems(elementProduct.innerHTML);
   sumPrices();
 });
 
@@ -94,9 +93,16 @@ const removeLoading = () => {
   tagLoading.remove();
 };
 
+const cartClickEvent = () => {
+  elementProduct.innerHTML = getSavedCartItems();
+  const ol = document.querySelectorAll('.cart__item');
+  ol.forEach((item) => item.addEventListener('click', cartItemClickListener));
+};
+
 window.onload = async () => { 
   loading();
   await loadProductList();
+  cartClickEvent();
   removeLoading();
-  getSavedCartItems(elementProduct.innerHTML);
+  sumPrices();
 };
