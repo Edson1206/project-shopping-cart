@@ -7,8 +7,8 @@ const sumPrices = () => {
   getItem.forEach((item) => {
     amount += Number(item.innerText.split('$')[1]);
   });
-  total.innerHTML = `Valor Total: R$ ${amount}`;
-  if (total.innerHTML === 'Valor Total: R$ 0') total.innerHTML = '';
+  total.innerHTML = amount;
+  if (total.innerHTML === '0') total.innerHTML = '';
 };
 
 const createProductImageElement = (imageSource) => {
@@ -30,7 +30,7 @@ const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').inn
 const cartItemClickListener = (event) => {
   event.target.remove();
   sumPrices();
-  saveCartItems(elementProduct.innerHTML);
+  saveCartItems('cartItems', elementProduct.innerHTML);
 };
 
 const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
@@ -46,7 +46,7 @@ const loadProdutsCart = async (event) => {
   const fetchEveryItem = await fetchItem(ProductID);
   const cart = createCartItemElement(fetchEveryItem);
   elementProduct.appendChild(cart);
-  saveCartItems(elementProduct.innerHTML);
+  saveCartItems('cartItems', elementProduct.innerHTML);
   sumPrices();
 };
 
@@ -77,7 +77,7 @@ const loadProductList = async () => {
 const clean = document.querySelector('.empty-cart');
 clean.addEventListener('click', () => {
   elementProduct.innerHTML = '';
-  saveCartItems(elementProduct.innerHTML);
+  saveCartItems('cartItems', elementProduct.innerHTML);
   sumPrices();
 });
 
