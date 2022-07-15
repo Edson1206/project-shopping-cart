@@ -1,4 +1,15 @@
 const elementProduct = document.querySelector('.cart__items');
+const total = document.querySelector('.total-price');
+
+const sumPrices = () => {
+  let amount = 0;
+  const getItem = document.querySelectorAll('.cart__item'); 
+  getItem.forEach((item) => {
+    amount += Number(item.innerText.split('$')[1]);
+  });
+  total.innerHTML = `Valor Total: R$ ${amount}`;
+  if (total.innerHTML === 'Valor Total: R$ 0') total.innerHTML = '';
+};
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -16,9 +27,11 @@ const createCustomElement = (element, className, innerText) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const cartItemClickListener = (event) => 
+const cartItemClickListener = (event) => {
   event.target.remove();
+  sumPrices();
   saveCartItems(elementProduct.innerHTML);
+};
 
 const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
   const li = document.createElement('li');
@@ -34,6 +47,7 @@ const loadProdutsCart = async (event) => {
   const cart = createCartItemElement(fetchEveryItem);
   elementProduct.appendChild(cart);
   saveCartItems(elementProduct.innerHTML);
+  sumPrices();
 };
 
 const createProductItemElement = ({ sku, name, image }) => {
@@ -60,24 +74,25 @@ const loadProductList = async () => {
   });
 };
 
-  const clean = document.querySelector('.empty-cart');
-  clean.addEventListener('click', () => {
-    elementProduct.innerHTML = '';
-    saveCartItems(elementProduct.innerHTML);
-  });
+const clean = document.querySelector('.empty-cart');
+clean.addEventListener('click', () => {
+  elementProduct.innerHTML = '';
+  saveCartItems(elementProduct.innerHTML);
+  sumPrices();
+});
 
-  const loading = () => {
-    const element = document.createElement('h1');
-    element.innerText = 'carregando...';
-    element.className = 'loading';
-    const body = document.querySelector('body');
-    body.appendChild(element);
-  };
+const loading = () => {
+  const element = document.createElement('h1');
+  element.innerText = 'carregando...';
+  element.className = 'loading';
+  const body = document.querySelector('body');
+  body.appendChild(element);
+};
 
-  const removeLoading = () => {
-    const tagLoading = document.querySelector('.loading');
-    tagLoading.remove();
-  };
+const removeLoading = () => {
+  const tagLoading = document.querySelector('.loading');
+  tagLoading.remove();
+};
 
 window.onload = async () => { 
   loading();
