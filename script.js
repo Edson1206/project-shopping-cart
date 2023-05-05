@@ -7,7 +7,7 @@ const sumPrices = () => {
   getItem.forEach((item) => {
     amount += Number(item.innerText.split('$')[1]);
   });
-  total.innerHTML = amount;
+  total.innerHTML = Math.round(amount * 100) / 100;
   if (total.innerHTML === '0') total.innerHTML = '';
 };
 
@@ -30,6 +30,7 @@ const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').inn
 const cartItemClickListener = (event) => {
   event.target.remove();
   sumPrices();
+  saveCartItems(elementProduct.innerHTML);
 };
 
 const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
@@ -97,6 +98,8 @@ const cartClickEvent = () => {
   elementProduct.innerHTML = getSavedCartItems();
   const ol = document.querySelectorAll('.cart__item');
   ol.forEach((item) => item.addEventListener('click', cartItemClickListener));
+  saveCartItems(elementProduct.innerHTML);
+  sumPrices();
 };
 
 window.onload = async () => { 
